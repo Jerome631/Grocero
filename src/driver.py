@@ -46,13 +46,13 @@ class Driver:
         wait.until(EC.element_to_be_clickable((By.XPATH, before))).click()
 
     def search(self, element, element_type):
-            """
-            Pattern match and find the elements at the top of the page that have best cheapest and fastest.
-            :return:
-            """
+        """
+        Pattern match and find the elements at the top of the page that have best cheapest and fastest.
+        :return:
+        """
 
-            matching_elements = self.driver.find_elements(By.XPATH,f"//*[contains({element_type}, '{element}')]")
-            return matching_elements
+        matching_elements = self.driver.find_elements(By.XPATH,f"//*[contains({element_type}, '{element}')]")
+        return matching_elements
 
     def finish(self):
         self.driver.quit()

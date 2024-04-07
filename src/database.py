@@ -4,6 +4,7 @@ from datetime import date
 today = date.today()
 
 
+# TODO SET ENV VAR
 PRICE_DAYS_BACK = 5
 DB_PASS = os.getenv("DB_PASS","Fortify136")
 

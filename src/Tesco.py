@@ -1,6 +1,5 @@
-from common import perform_request_tesco, standardise, replace_ownbrand, reg_replace, replace_if
-
-
+from common import perform_request_tesco, standardise, replace_ownbrand, \
+    reg_replace,remove_string_from_number,remove_currency, replace_if, generate_insert
 class Tesco():
     """
     Class for Teco
@@ -11,6 +10,9 @@ class Tesco():
         Method to parse the tesco HTML text and make it useable data.
         """
         if "toggle" in raw_html:
+            return None
+
+        if "any" in raw_html:
             return None
 
         if "out of stock" in raw_html:
@@ -36,14 +38,32 @@ class Tesco():
 
         product_info = raw_html.split("€")
         product_info[0] = standardise(replace_ownbrand(product_info[0], "tesco"))
+        product_info[1] = float(remove_string_from_number(remove_currency(product_info[1])))
+        product_info[2] = float(product_info[2].split("/")[0])
         # [product, price , price per kg]
         return product_info
 
-    def search_product(self, product):
+
+    def format_dict(self, product, cleaned):
+        return {
+            'brand': 'Tesco',
+            'category': product,
+            'product': cleaned[0],
+            'price': cleaned[1],
+            'unit_price': cleaned[2]
+        }
+
+    def search_product(self, product, is_csv=True):
         """
-        Product : String of the item you want from the shops.
+        Searches for product.
+        product = Name of grocery we want.
+        is_csv: True, as when I run locally, I want to see it in terminal.
         """
-        resp = []
+        resp = {
+            'products': [],
+            'meta': []
+        }
+
         params = {
             'query': product,
             'icid': 'tescohp_sws-1_m-sug_in-cola_out-cola',
@@ -53,12 +73,10 @@ class Tesco():
             raw_html = row.next_element.next_element.text.lower()
             cleaned = self.remove_garbage(raw_html)
             if cleaned:
-                # print(f"Tesco, {product}, {cleaned[0]},{cleaned[1]}")
+                if is_csv:
+                    resp['products'].append(self.format_dict(product, cleaned))
+                    resp['meta'].append(float(cleaned[1]))
+                else:
+                    generate_insert(product,cleaned[0],'tesco',cleaned[1], None)
 
-                resp.append({
-                    'brand' : 'Tesco',
-                    'category' : product,
-                    'product' : cleaned[0],
-                    'price' :  cleaned[1]
-                })
         return resp
