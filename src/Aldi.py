@@ -7,7 +7,7 @@ import requests
 class Aldi:
     def __init__(self, item_names):
         self.item_names = item_names
-        self.products = []
+        self.product = []
     _headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:85.0) Gecko/20100101 Firefox/85.0',
         'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -67,6 +67,6 @@ class Aldi:
                 resp['products'].append(self.format_dict(product, aldi_product, price, price_per_unit))
                 resp['meta'].append(price)
             else:
-                generate_insert(product, aldi_product, 'aldi', price, f"https://groceries.aldi.ie{item['Url']}")
+                generate_insert(product, aldi_product, 'aldi', price, f"https://groceries.aldi.ie/en-GB/Search?keywords={item['Url']}")
 
         return resp

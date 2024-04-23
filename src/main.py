@@ -45,7 +45,7 @@ def get_data(item_name: str):
     print("Done Tesco")
     db.perform_insert(list(set(supervalu.product)))
     print("Done SV")
-    db.perform_insert(list(set(aldi.products)))
+    db.perform_insert(list(set(aldi.product)))
     return get_result_from_db(item_name)
 
 
