@@ -80,5 +80,6 @@ class Tesco():
                     resp['meta'].append(float(cleaned[1]))
                 else:
                     generate_insert(product, cleaned[0], 'tesco', cleaned[1], None)
-
+                # Append product to the products list
+                self.products.append(cleaned[0])
         return resp
