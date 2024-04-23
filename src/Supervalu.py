@@ -2,6 +2,9 @@ from common import replace_ownbrand, perform_request, standardise, remove_curren
 
 
 class Supervalu():
+    def __init__(self, item_names):
+        self.item_names = item_names
+        self.product = []
 
     def remove_garbage(self, raw_product):
         raw_product = raw_product.split("a Day")[0].split(",")
@@ -27,4 +30,5 @@ class Supervalu():
                 continue
             except IndexError as e:
                 continue
+        self.product.append(cleaned[0])
         return result

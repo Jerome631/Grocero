@@ -2,8 +2,11 @@ from common import perform_request_tesco, standardise, replace_ownbrand, reg_rep
 
 
 class Tesco():
+    def __init__(self, item_names):
+        self.item_names = item_names
+        self.product = []
     """
-    Class for Teco
+    Class for Tesco
     """
 
     def remove_garbage(self, raw_html):
@@ -60,4 +63,5 @@ class Tesco():
                     'product': cleaned[0],
                     'price': cleaned[1]
                 })
+            self.product.append(cleaned[0])
         return resp

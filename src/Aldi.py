@@ -5,6 +5,9 @@ import requests
 
 
 class Aldi():
+    def __init__(self, item_names):
+        self.item_names = item_names
+
     historical = []
     products = []
 
