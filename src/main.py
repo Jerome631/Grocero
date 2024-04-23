@@ -41,9 +41,9 @@ def get_data(item_name: str):
     aldi = Aldi([item_name])
 
     # I was debugging this, I had it previously + ing the lists, but this is nicer to debug.
-    db.perform_insert(list(set(tesco.products)))
+    db.perform_insert(list(set(tesco.product)))
     print("Done Tesco")
-    db.perform_insert(list(set(supervalu.products)))
+    db.perform_insert(list(set(supervalu.product)))
     print("Done SV")
     db.perform_insert(list(set(aldi.products)))
     return get_result_from_db(item_name)

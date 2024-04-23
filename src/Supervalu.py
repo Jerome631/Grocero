@@ -5,7 +5,7 @@ from common import replace_ownbrand, perform_request, standardise, \
 class Supervalu():
     def __init__(self, item_names):
         self.item_names = item_names
-        self.products = []
+        self.product = []
 
     def remove_garbage(self, raw_product):
 
@@ -59,6 +59,7 @@ class Supervalu():
                     resp['meta'].append(float(cleaned[1]))
                 else:
                     generate_insert(product, cleaned[0], 'supervalue', cleaned[1], None)
+                self.product.append(cleaned[0])
 
             except AttributeError as e:
                 continue

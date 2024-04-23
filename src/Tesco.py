@@ -5,7 +5,7 @@ from common import perform_request_tesco, standardise, replace_ownbrand, \
 class Tesco():
     def __init__(self, item_names):
         self.item_names = item_names
-        self.products = []
+        self.product = []
     """
     Class for Teco
     """
@@ -71,7 +71,7 @@ class Tesco():
             'query': product,
             'icid': 'tescohp_sws-1_m-sug_in-cola_out-cola',
         }
-        soup = perform_request_tesco('https://www.tesco.ie/groceries/en-IE/search', params)
+        soup = perform_request_tesco('https://www.tesco.ie/groceries/en-IE/', params)
         for row in soup.find_all("li", {"class": "product-list--list-item"}):
             raw_html = row.next_element.next_element.text.lower()
             cleaned = self.remove_garbage(raw_html)
@@ -82,5 +82,5 @@ class Tesco():
                 else:
                     generate_insert(product, cleaned[0], 'tesco', cleaned[1], None)
                 # Append product to the products list
-                self.products.append(cleaned[0])
+                self.product.append(cleaned[0])
         return resp
