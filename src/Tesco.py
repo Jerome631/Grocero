@@ -4,7 +4,7 @@ from common import perform_request_tesco, standardise, replace_ownbrand, reg_rep
 class Tesco():
     def __init__(self, item_names):
         self.item_names = item_names
-        self.product = []
+    products = []
     """
     Class for Tesco
     """
@@ -63,5 +63,5 @@ class Tesco():
                     'product': cleaned[0],
                     'price': cleaned[1]
                 })
-            self.product.append(cleaned[0])
+            self.products.append(cleaned[0])
         return resp
