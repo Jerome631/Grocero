@@ -57,6 +57,6 @@ class Aldi():
 
             price = float(item['ListPrice'])
             price_per_unit = float(item['UnitPrice'].replace("€",""))
-            generate_insert(product, aldi_product, 'aldi', price, f"https://groceries.aldi.ie/en-GB/Search?keywords={item['Url']}")
+            generate_insert(product, aldi_product, 'aldi', price, list(f"https://groceries.aldi.ie/en-GB/Search?keywords={item['Url']}"))
 
         return resp
