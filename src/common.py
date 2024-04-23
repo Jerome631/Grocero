@@ -128,4 +128,3 @@ def perform_request_tesco(url, param):
     }
     result = requests.get(url=url, headers=head, params=param)
     return BeautifulSoup(result.content, "html.parser")
-

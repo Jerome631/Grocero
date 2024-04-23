@@ -1,4 +1,5 @@
-from common import replace_ownbrand, perform_request, standardise, remove_currency, replace_if, split_at_letters
+from common import replace_ownbrand, perform_request, standardise, remove_currency, replace_if, split_at_letters, \
+    generate_insert
 
 
 class Supervalu():
@@ -14,22 +15,25 @@ class Supervalu():
         return [super_product, float(price)]
 
     def search_product(self, product):
-        result = []
+        """
+        Searches for product.
+        product = Name of grocery we want.
+        is_csv: True, as when I run locally, I want to see it in terminal.
+        """
+        resp = {
+            'products': [],
+            'meta': []
+        }
+
         soup = perform_request(f'https://shop.supervalu.ie/sm/delivery/rsid/5550/results?q={product}')
 
-        for product in soup.find_all("div", {"class": "ColListing--1fk1zey iowyBD"}):
+        for item in soup.find_all("div", {"class": "ColListing--1fk1zey iowyBD"}):
             try:
-                cleaned = self.remove_garbage(product.text)
-                result.append({
-                    'brand': "SuperValu",
-                    'category': product,
-                    'product': cleaned[0],
-                    'price': cleaned[1]
-                })
+                cleaned = self.remove_garbage(item.text)
+                generate_insert(product, cleaned[0], 'supervalue', cleaned[1], None)
 
             except AttributeError as e:
                 continue
             except IndexError as e:
                 continue
-            self.products.append(cleaned[0])
-        return result
+        return resp

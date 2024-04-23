@@ -1,4 +1,4 @@
-from common import perform_request_tesco, standardise, replace_ownbrand, reg_replace, replace_if
+from common import perform_request_tesco, standardise, replace_ownbrand, reg_replace, replace_if, generate_insert
 
 
 class Tesco():
@@ -43,9 +43,15 @@ class Tesco():
 
     def search_product(self, product):
         """
-        Product : String of the item you want from the shops.
+        Searches for product.
+        product = Name of grocery we want.
+        is_csv: True, as when I run locally, I want to see it in terminal.
         """
-        resp = []
+        resp = {
+            'products': [],
+            'meta': []
+        }
+
         params = {
             'query': product,
             'icid': 'tescohp_sws-1_m-sug_in-cola_out-cola',
@@ -55,13 +61,6 @@ class Tesco():
             raw_html = row.next_element.next_element.text.lower()
             cleaned = self.remove_garbage(raw_html)
             if cleaned:
-                # print(f"Tesco, {product}, {cleaned[0]},{cleaned[1]}")
+                generate_insert(product,cleaned[0],'tesco',cleaned[1], None)
 
-                resp.append({
-                    'brand': 'Tesco',
-                    'category': product,
-                    'product': cleaned[0],
-                    'price': cleaned[1]
-                })
-            self.products.append(cleaned[0])
         return resp

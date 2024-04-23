@@ -28,7 +28,7 @@ class DBConnector:
                 self._cursor.execute(item)
                 self._conn.commit()
             except Exception as e:
-                print(e)
+                print("Data insert failed: "+e)
 
     def get_item(self, item):
         try:
