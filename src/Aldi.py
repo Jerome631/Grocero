@@ -1,13 +1,13 @@
 import json
-from common import standardise, generate_insert, replace_ownbrand
+from common import remove_currency, standardise, standardise_liquid, replace_ownbrand
 
 import requests
 
 
-class Aldi:
-    def __init__(self, item_names):
-        self.item_names = item_names
-        self.product = []
+class Aldi():
+    historical = []
+    products = []
+
     _headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:85.0) Gecko/20100101 Firefox/85.0',
         'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -25,34 +25,16 @@ class Aldi:
         ('limit', '200'),
     )
 
-    def format_dict(self, product, aldi_product, price, price_per_unit):
-        return {
-            'brand': "Aldi",
-            'category': product,
-            'product': aldi_product,
-            'price': price,
-            'unit_price': price_per_unit
-        }
-
-    def search_product(self, product, is_csv=True):
-        """
-        Searches for product.
-        product = Name of grocery we want.
-        is_csv: True, as when I run locally, I want to see it in terminal.
-        """
+    def search_product(self, product):
 
         query = json.dumps({"Query": product})
         url = "https://groceries.aldi.ie/api/aldisearch/autocomplete"
         response = requests.post(url=url, headers=self._headers, params=self._params, data=query)
 
-        resp = {
-            'products': [],
-            'meta': []
-        }
+        resp = []
         for item in response.json()['Suggestions']:
 
             aldi_product = standardise(item['DisplayName'])
-            # Aldi actually rename too many things, this isn't really possible to do
             for ownbrand in ['clonbawn', "healys farm",
                              "ballymore crust",
                              "healys",
@@ -61,12 +43,11 @@ class Aldi:
                 if ownbrand in aldi_product:
                     aldi_product = replace_ownbrand(aldi_product, ownbrand)
 
-            price = float(item['ListPrice'])
-            price_per_unit = float(item['UnitPrice'].replace("€", ""))
-            if is_csv:
-                resp['products'].append(self.format_dict(product, aldi_product, price, price_per_unit))
-                resp['meta'].append(price)
-            else:
-                generate_insert(product, aldi_product, 'aldi', price, f"https://groceries.aldi.ie/en-GB/Search?keywords={item['Url']}")
-
+            resp.append({
+                'brand': 'Aldi',
+                'category': product,
+                'product': aldi_product,
+                'price': item['ListPrice'],
+                'url': f"https://groceries.aldi.ie/en-GB/Search?keywords={item['Url']}"
+            })
         return resp

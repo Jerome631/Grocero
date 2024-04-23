@@ -3,23 +3,11 @@ import random
 from bs4 import BeautifulSoup
 from datetime import date
 import re
-from statistics import median, mode, mean
 
 today = date.today()
 
 # dd/mm/YY
 DATE = today.strftime("%Y-%m-%d")
-
-GOOD = ['carrots', 'brocolli', 'parsnip', 'peas', 'soup', 'salad',
-        'coriander', 'orange', 'apple', 'pear', 'onions', 'pineapple', 'pepper',
-        'cucumber', 'aubergine', 'tomato', 'banana', 'grape', 'cherry', 'strawberry']
-CARBS = ['potato', 'pasta', 'bread', 'baguette', 'pita', 'weetabix']
-DAIRY = ['milk', 'yogurt', 'cheese', 'gouda', 'feta']
-PROTEIN = ['chicken', 'salmon', 'beef', 'pork', 'sausages', 'steak', 'lamb', 'turkey', 'nuts', 'eggs', 'beans']
-FATS = ['butter', 'mayo', 'olive oil', 'pate']
-BAD = ['chocolate', 'crisps', 'cola', 'fanta', 'monster', 'redbull', 'muffins', 'biscuits', 'cakes']
-
-FOOD_GROUPS = [GOOD, CARBS, ]  # DAIRY, PROTEIN, FATS, BAD]
 
 
 def split_at_letters(data):
@@ -34,8 +22,8 @@ def reg_replace(start, end, data):
     Method to replace substring between two start strings.
     :param start: starting string ie hello
     :param end: terminating string ie world
-    :param data: hello to another world this is jerome.
-    :return: the string with everything gone between start and end : this is jerome
+    :param data: hello to another world this is ciaran.
+    :return: the string with everything gone between start and end : this is ciaran
     """
     reg = "(%s).*?(%s)" % (start, end)
     r = re.compile(reg, re.DOTALL)
@@ -55,22 +43,12 @@ def replace_if(data, conditions):
 
 
 def remove_string_from_number(data):
-    match = re.search(r'\d+\.\d+', data)
-
-    if match:
-        number_as_float = float(match.group(0))
-        return number_as_float
+    data = re.findall(r'[ -](\d+(?:\.\d+)?)', data)
+    return data[0]
 
 
 def cleanse(data):
     return re.sub(r"[^a-zA-Z0-9]+", ' ', data).lower()
-
-
-def remove_alpha(product):
-    result = re.sub(r'[a-zA-Z]', "", product)
-    result = re.sub(r'[^0-9.]', ' ', result)
-    result = re.sub(r'\.+', '.', result)
-    return result.strip().split(" ")
 
 
 def remove_after_keyword(data, key):
@@ -100,7 +78,25 @@ def generate_insert(category, item, shop, data, url, brand=None, sku=None):
     return rstr
 
 
+def standardise_liquid(data):
+    """
+    Liquid units are labeled differently.
+    This formats them to be "product number litre"
+    """
+    pattern = r'\b(\d+)\s*(?:ltr|l|litre)\b'
+    match = re.findall(pattern, data, re.IGNORECASE)
+    if match:
+        data = data[:data.index(match[0]) + 1] + " litre"
+
+    # I don't like it but regex won't work
+    if "ltr" in data:
+        data = data[:data.index('ltr') - 1] + " " + data[data.index('ltr') - 1] + " litre"
+
+    return data
+
+
 def standardise(data):
+    # data = standardise_liquid(data)
     data = data.replace("'", "")
 
     data = remove_currency(cleanse(data))
@@ -112,13 +108,6 @@ def generate_historical(data, url):
     price = f"{(data[1].strip())}"
     rstr = f"INSERT into historical_prices values (DEFAULT,'{url}','{price}','{DATE}');"
     return rstr
-
-
-def stats(data, brand, category, now):
-    """
-    Method used by render_csv to display the data to terminal.
-    """
-    print(f"{brand},{now}, {category},{len(data)} , {mean(data)}, {median(data)} ,{mode(data)}")
 
 
 def perform_request(url):
@@ -139,3 +128,4 @@ def perform_request_tesco(url, param):
     }
     result = requests.get(url=url, headers=head, params=param)
     return BeautifulSoup(result.content, "html.parser")
+

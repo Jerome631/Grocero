@@ -1,68 +1,30 @@
-from common import replace_ownbrand, perform_request, standardise, \
-    generate_insert, replace_if, remove_string_from_number
+from common import replace_ownbrand, perform_request, standardise, remove_currency, replace_if, split_at_letters
 
 
 class Supervalu():
-    def __init__(self, item_names):
-        self.item_names = item_names
-        self.product = []
 
     def remove_garbage(self, raw_product):
-
-        unit_price = raw_product.split("product description")[1].split("€")[2].split("/")[0]
-
-        raw_product = raw_product.split("a Day")[0].replace(",", "").split("€")
-        super_product = raw_product[0]
-        super_product = replace_ownbrand(standardise(super_product), "supervalu")
+        raw_product = raw_product.split("a Day")[0].split(",")
+        super_product = replace_ownbrand(standardise(raw_product[0]), "supervalu")
         super_product = replace_if(super_product, ['signature tastes'])
+        price = remove_currency(split_at_letters(raw_product[1]))
+        return [super_product, float(price)]
 
-        try:
-            raw_price = raw_product[2].split(" ")[0]
-            if "/" in raw_price:
-                price = float(raw_price.split("/")[0])
-            else:
-                price = float(raw_price)
-
-        except:
-            price = float(raw_product[3].split(" ")[0])
-
-        return [super_product.rstrip(), price, unit_price]
-
-    def format_dict(self, product, cleaned):
-        return {
-            'brand': "SuperValu",
-            'category': product,
-            'product': cleaned[0],
-            'price': cleaned[1],
-            'unit_price': cleaned[2],
-
-        }
-
-    def search_product(self, product, is_csv=True):
-        """
-        Searches for product.
-        product = Name of grocery we want.
-        is_csv: True, as when I run locally, I want to see it in terminal.
-        """
-        resp = {
-            'products': [],
-            'meta': []
-        }
-
+    def search_product(self, product):
+        result = []
         soup = perform_request(f'https://shop.supervalu.ie/sm/delivery/rsid/5550/results?q={product}')
 
-        for item in soup.find_all("div", {"class": "ColListing--1fk1zey iowyBD"}):
+        for product in soup.find_all("div", {"class": "ColListing--1fk1zey iowyBD"}):
             try:
-                cleaned = self.remove_garbage(item.text)
-                if is_csv:
-                    resp['products'].append(self.format_dict(product, cleaned))
-                    resp['meta'].append(float(cleaned[1]))
-                else:
-                    generate_insert(product, cleaned[0], 'supervalue', cleaned[1], None)
-                self.product.append(cleaned[0])
-
+                cleaned = self.remove_garbage(product.text)
+                result.append({
+                    'brand': "SuperValu",
+                    'category': product,
+                    'product': cleaned[0],
+                    'price': cleaned[1]
+                })
             except AttributeError as e:
                 continue
             except IndexError as e:
                 continue
-        return resp
+        return result

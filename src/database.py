@@ -52,7 +52,7 @@ class DBConnector:
 
         # If there is no data returned by the cursor, that means we need to get some
         if data:
-            print(f"There is data within {PRICE_DAYS_BACK}")
+            print(f"There is data within {PRICE_DAYS_BACK} days")
             return False
-        print(f"No data for {item} within past {PRICE_DAYS_BACK}")
+        print(f"No data for {item} within past {PRICE_DAYS_BACK} days")
         return True
