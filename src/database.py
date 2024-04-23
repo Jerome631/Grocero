@@ -12,7 +12,7 @@ DB_PASS = os.getenv("DB_PASS", "Fortify136")
 class DBConnector:
 
     def __init__(self):
-        self._conn_string = f"host='grocerodb.cjy8c8kiefqe.eu-north-1.rds.amazonaws.com' dbname='postgres' user='Jerome' password='{DB_PASS} port=5432'"
+        self._conn_string = f"host='grocerodb.cjy8c8kiefqe.eu-north-1.rds.amazonaws.com' dbname='postgres' user='Jerome' password='{DB_PASS}'"
         self._conn = psycopg2.connect(self._conn_string)
         self._cursor = self._conn.cursor()
 
