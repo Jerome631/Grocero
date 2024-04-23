@@ -3,6 +3,8 @@ from common import replace_ownbrand, remove_currency, perform_request_tesco, \
 
 
 class Dunnes():
+    def __init__(self, item_names):
+        self.item_names = item_names
     """
     The Dunnes class
     """

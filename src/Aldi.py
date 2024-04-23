@@ -5,6 +5,8 @@ import requests
 
 
 class Aldi:
+    def __init__(self, item_names):
+        self.item_names = item_names
     _headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:85.0) Gecko/20100101 Firefox/85.0',
         'Accept': 'application/json, text/javascript, */*; q=0.01',
