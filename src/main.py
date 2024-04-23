@@ -41,11 +41,12 @@ def get_data(item_name: str):
     aldi = Aldi([item_name])
 
     # I was debugging this, I had it previously + ing the lists, but this is nicer to debug.
-    db.perform_insert(list(set(tesco.product)))
+    db.perform_insert(list(set(tesco.products)))
     print("Done Tesco")
-    db.perform_insert(list(set(supervalu.product)))
+    db.perform_insert(list(set(supervalu.products)))
     print("Done SV")
-    db.perform_insert(list(set(aldi.product)))
+    db.perform_insert(list(set(aldi.products)))
+    # Todo, change this to be in memory representation we return rather than querying again from DB.
     return get_result_from_db(item_name)
 
 
