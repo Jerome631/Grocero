@@ -5,6 +5,7 @@ from common import replace_ownbrand, perform_request, standardise, \
 class Supervalu():
     def __init__(self, item_names):
         self.item_names = item_names
+        self.products = []
 
     def remove_garbage(self, raw_product):
 
