@@ -46,7 +46,7 @@ class DBConnector:
         :param item:
         :return:
         """
-        select = f"select date_trunc('hour', last_updated),category from product WHERE date_trunc('hour', last_updated) >  NOW() - INTERVAL '{PRICE_DAYS_BACK} days' AND category ilike '{item}' limit(1);"
+        select = f"select date_trunc('hour', last_updated),category from product WHERE date_trunc('hour', last_updated) >  NOW() - INTERVAL '{PRICE_DAYS_BACK} days' AND category like '{item}' limit(1);"
         self._cursor.execute(select)
         data = self._cursor.fetchall()
 
