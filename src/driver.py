@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import DesiredCapabilities
 
+
 class Driver:
 
     def __init__(self):
@@ -31,14 +32,14 @@ class Driver:
 
         self.driver = driver
 
-    def handle_cookie(self,element,xpath,url):
+    def handle_cookie(self, element, xpath, url):
         """
         Element : The HTML element we will use to find the button.
         xpath :         button[@class=
         url : the URL we want to search
         :return:
         """
-        WAIT_TIME=12
+        WAIT_TIME = 12
         WebDriverWait(self.driver, random.randint(5, 10))
         self.driver.get(url)
         wait = WebDriverWait(self.driver, random.randint(WAIT_TIME / 2, WAIT_TIME))
@@ -51,7 +52,7 @@ class Driver:
         :return:
         """
 
-        matching_elements = self.driver.find_elements(By.XPATH,f"//*[contains({element_type}, '{element}')]")
+        matching_elements = self.driver.find_elements(By.XPATH, f"//*[contains({element_type}, '{element}')]")
         return matching_elements
 
     def finish(self):

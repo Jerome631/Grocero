@@ -1,12 +1,12 @@
 import os
 import psycopg2
 from datetime import date
-today = date.today()
 
+today = date.today()
 
 # TODO SET ENV VAR
 PRICE_DAYS_BACK = 5
-DB_PASS = os.getenv("DB_PASS","Fortify136")
+DB_PASS = os.getenv("DB_PASS", "Fortify136")
 
 
 class DBConnector:
@@ -37,7 +37,6 @@ class DBConnector:
             return self._cursor.fetchall()
         except Exception as e:
             print(e)
-
 
     def should_fetch_new(self, item):
         """

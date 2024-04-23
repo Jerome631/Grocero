@@ -1,5 +1,7 @@
 from common import perform_request_tesco, standardise, replace_ownbrand, \
-    reg_replace,remove_string_from_number,remove_currency, replace_if, generate_insert
+    reg_replace, remove_string_from_number, remove_currency, replace_if, generate_insert
+
+
 class Tesco():
     """
     Class for Teco
@@ -24,7 +26,6 @@ class Tesco():
 
         raw_html = replace_if(raw_html, ["write a review", "aldi price match"])
 
-
         known_reg = [
             {"start": "quantity", "end": "add"},
             {"start": "rest", "end": "shelf"},
@@ -42,7 +43,6 @@ class Tesco():
         product_info[2] = float(product_info[2].split("/")[0])
         # [product, price , price per kg]
         return product_info
-
 
     def format_dict(self, product, cleaned):
         return {
@@ -77,6 +77,6 @@ class Tesco():
                     resp['products'].append(self.format_dict(product, cleaned))
                     resp['meta'].append(float(cleaned[1]))
                 else:
-                    generate_insert(product,cleaned[0],'tesco',cleaned[1], None)
+                    generate_insert(product, cleaned[0], 'tesco', cleaned[1], None)
 
         return resp

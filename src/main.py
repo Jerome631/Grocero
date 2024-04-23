@@ -29,7 +29,7 @@ def root():
     return {"Version": "1.1.0"}
 
 
-def get_data(item_name:str):
+def get_data(item_name: str):
     """
     Method to get data from the various store providers.
 
@@ -49,7 +49,7 @@ def get_data(item_name:str):
     return get_result_from_db(item_name)
 
 
-def get_result_from_db(item_name:str):
+def get_result_from_db(item_name: str):
     """
     When needed we get an item from the DB.
     :param item_name:
@@ -59,10 +59,13 @@ def get_result_from_db(item_name:str):
     return_data = []
     try:
         for item in result:
-            return_data.append({'key': item[0], 'description': item[1], 'shop': item[2], 'price': item[3], 'url': item[4], 'last_updated': item[5]})
+            return_data.append(
+                {'key': item[0], 'description': item[1], 'shop': item[2], 'price': item[3], 'url': item[4],
+                 'last_updated': item[5]})
     except Exception as e:
         print(e)
     return return_data
+
 
 @app.get("/products/{item_name}")
 def read_item(item_name: str):
@@ -81,6 +84,7 @@ def read_item(item_name: str):
         return get_data(item_name)
     else:
         return get_result_from_db(item_name)
+
 
 # Goal :
 """

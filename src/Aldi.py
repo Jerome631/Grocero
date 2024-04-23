@@ -5,7 +5,6 @@ import requests
 
 
 class Aldi:
-
     _headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:85.0) Gecko/20100101 Firefox/85.0',
         'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -60,7 +59,7 @@ class Aldi:
                     aldi_product = replace_ownbrand(aldi_product, ownbrand)
 
             price = float(item['ListPrice'])
-            price_per_unit = float(item['UnitPrice'].replace("€",""))
+            price_per_unit = float(item['UnitPrice'].replace("€", ""))
             if is_csv:
                 resp['products'].append(self.format_dict(product, aldi_product, price, price_per_unit))
                 resp['meta'].append(price)

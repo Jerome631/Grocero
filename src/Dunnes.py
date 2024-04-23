@@ -6,6 +6,7 @@ class Dunnes():
     """
     The Dunnes class
     """
+
     def get_unit(self, raw_product):
         raw_unit = raw_product.split("product description")[1].split("€")[2]
         if "each" in raw_unit:
