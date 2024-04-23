@@ -65,7 +65,7 @@ def remove_currency(data):
 
 def generate_insert(category, item, shop, data, url, brand=None, sku=None):
     print(data)
-    price = {(data[1].strip())}
+    price = f"{(data[1].strip())}"
     other = f"{cleanse(data[2].strip())}" if len(data) > 3 else ''
     if (brand == None):
         brand = 'N/A'

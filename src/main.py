@@ -38,8 +38,8 @@ def get_data(item_name: str):
     """
     tesco = Tesco([item_name])
     supervalu = Supervalu([item_name])
-    aldi = Aldi([item_name])
-    aldi_prod = aldi.search_product(item_name)
+    '''aldi = Aldi([item_name])
+    aldi_prod = aldi.search_product(item_name)'''
     super_prod = supervalu.search_product(item_name)
     tesco_prod = tesco.search_product(item_name)
 
@@ -48,7 +48,7 @@ def get_data(item_name: str):
     print("Done Tesco")
     db.perform_insert(super_prod)
     print("Done SV")
-    db.perform_insert(aldi_prod)
+    '''db.perform_insert(aldi_prod)'''
     # Todo, change this to be in memory representation we return rather than querying again from DB.
     return get_result_from_db(item_name)
 
