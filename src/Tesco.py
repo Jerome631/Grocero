@@ -5,6 +5,7 @@ from common import perform_request_tesco, standardise, replace_ownbrand, \
 class Tesco():
     def __init__(self, item_names):
         self.item_names = item_names
+        self.products = []
     """
     Class for Teco
     """
