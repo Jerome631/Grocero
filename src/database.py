@@ -1,10 +1,9 @@
 import os
 import psycopg2
 from datetime import date
-
 today = date.today()
 
-# TODO SET ENV VAR
+
 PRICE_DAYS_BACK = 5
 DB_PASS = os.getenv("DB_PASS", "Fortify136")
 
@@ -28,7 +27,7 @@ class DBConnector:
                 self._cursor.execute(item)
                 self._conn.commit()
             except Exception as e:
-                print("Data insert failed: "+e)
+                print(e)
 
     def get_item(self, item):
         try:
@@ -38,6 +37,7 @@ class DBConnector:
         except Exception as e:
             print(e)
 
+
     def should_fetch_new(self, item):
         """
 
@@ -46,7 +46,7 @@ class DBConnector:
         :param item:
         :return:
         """
-        select = f"select date_trunc('hour', last_updated),category from product WHERE date_trunc('hour', last_updated) >  NOW() - INTERVAL '{PRICE_DAYS_BACK} days' AND category like '{item}' limit(1);"
+        select = f"select date_trunc('hour', last_updated),category from product WHERE date_trunc('hour', last_updated) >  NOW() - INTERVAL '{PRICE_DAYS_BACK} days' AND category ilike '{item}' limit(1);"
         self._cursor.execute(select)
         data = self._cursor.fetchall()
 

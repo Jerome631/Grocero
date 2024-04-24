@@ -1,11 +1,11 @@
-from Tesco import Tesco
-from Supervalu import Supervalu
-from Aldi import Aldi
+from stores.Tesco import Tesco
+from stores.Supervalu import Supervalu
+from stores.Aldi import Aldi
+from stores.Dunnes import Dunnes
 from database import DBConnector
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-import logging
 
 app = FastAPI()
 origins = ["*"]
@@ -22,6 +22,7 @@ app.add_middleware(
 tesco = Tesco()
 supervalu = Supervalu()
 aldi = Aldi()
+dunnes = Dunnes()
 
 
 @app.get("/")
@@ -30,7 +31,7 @@ def root():
     Dummy method to ping.
     :return: Dict
     """
-    return {"Version": "1.1.0"}
+    return {"Version": "2.0.0"}
 
 
 def get_data(item_name: str):
@@ -40,17 +41,15 @@ def get_data(item_name: str):
     :param item_name:
     :return: list of dicts.
     """
-    tesco_list = Tesco.search_product(tesco, [item_name])
-    supervalu_list = Supervalu.search_product(supervalu, [item_name])
-    aldi_list = Aldi.search_product(aldi, [item_name])
-
-    # I was debugging this, I had it previously + ing the lists, but this is nicer to debug.
-    db.perform_insert(list(tesco_list))
-    print("Done Tesco")
-    db.perform_insert(list(supervalu_list))
-    print("Done SV")
-    db.perform_insert(list(aldi_list))
-    # Todo, change this to be in memory representation we return rather than querying again from DB.
+    aldi_prod = aldi.search_product(item_name)
+    super_prod = supervalu.search_product(item_name)
+    dunnes_products = dunnes.search_product(item_name)
+    tesco_prod = tesco.search_product(item_name)
+    # Perform sequentially in case one has an issue inserting we still have some data.
+    db.perform_insert(aldi_prod)
+    db.perform_insert(super_prod)
+    db.perform_insert(dunnes_products)
+    db.perform_insert(tesco_prod)
     return get_result_from_db(item_name)
 
 
@@ -90,17 +89,6 @@ def read_item(item_name: str):
     else:
         return get_result_from_db(item_name)
 
-
-# Goal :
-"""
-Add 
-
-- Format it input in the database so everything is lowercase.
-- On each search, add entry to historical.
-- Add Job to migrate data each day.
-- Fix bug on searching
-
-"""
 
 if __name__ == "__main__":
     """
