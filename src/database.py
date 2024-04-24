@@ -58,6 +58,6 @@ class DBConnector:
             print(data)
             print(f"There is data within {PRICE_DAYS_BACK} days")
             return False
-        print(f"Data:"+data)
+        print(f"Data:"+str(data))
         print(f"No data for {item} within past {PRICE_DAYS_BACK} days")
         return True
