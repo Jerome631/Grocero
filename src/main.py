@@ -19,6 +19,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+tesco = Tesco()
+supervalu = Supervalu()
+aldi = Aldi()
 
 @app.get("/")
 def root():
@@ -36,16 +39,16 @@ def get_data(item_name:str):
     :param item_name:
     :return: list of dicts.
     """
-    tesco = Tesco.search_product([item_name])
-    supervalu = Supervalu.search_product([item_name])
-    aldi = Aldi.search_product([item_name])
+    tesco_list = Tesco.search_product([item_name])
+    supervalu_list = Supervalu.search_product([item_name])
+    aldi_list = Aldi.search_product([item_name])
 
     # I was debugging this, I had it previously + ing the lists, but this is nicer to debug.
-    db.perform_insert(list(set(tesco)))
+    db.perform_insert(tesco_list)
     print("Done Tesco")
-    db.perform_insert(list(set(supervalu)))
+    db.perform_insert(supervalu_list)
     print("Done SV")
-    db.perform_insert(list(set(aldi)))
+    db.perform_insert(aldi_list)
     # Todo, change this to be in memory representation we return rather than querying again from DB.
     return get_result_from_db(item_name)
 
