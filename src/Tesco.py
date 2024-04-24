@@ -1,13 +1,14 @@
-from common import perform_request_tesco, standardise, replace_ownbrand, reg_replace, replace_if, generate_insert
+from common import perform_request_tesco, standardise, replace_ownbrand, reg_replace, replace_if
 
 
 class Tesco():
-    def __init__(self, item_names):
-        self.item_names = item_names
-    products = []
     """
     Class for Tesco
     """
+
+    def __init__(self,item_name):
+        self.item_name = item_name
+    products = []
 
     def remove_garbage(self, raw_html):
         """
@@ -24,6 +25,7 @@ class Tesco():
             return None
 
         raw_html = replace_if(raw_html, ["write a review", "aldi price match"])
+
 
         known_reg = [
             {"start": "quantity", "end": "add"},
@@ -43,15 +45,9 @@ class Tesco():
 
     def search_product(self, product):
         """
-        Searches for product.
-        product = Name of grocery we want.
-        is_csv: True, as when I run locally, I want to see it in terminal.
+        Product : String of the item you want from the shops.
         """
-        resp = {
-            'products': [],
-            'meta': []
-        }
-
+        resp = []
         params = {
             'query': product,
             'icid': 'tescohp_sws-1_m-sug_in-cola_out-cola',
@@ -61,6 +57,12 @@ class Tesco():
             raw_html = row.next_element.next_element.text.lower()
             cleaned = self.remove_garbage(raw_html)
             if cleaned:
-                generate_insert(product,cleaned[0],'tesco',cleaned[1], None)
+                # print(f"Tesco, {product}, {cleaned[0]},{cleaned[1]}")
 
+                resp.append({
+                    'brand' : 'Tesco',
+                    'category' : product,
+                    'product' : cleaned[0],
+                    'price' :  cleaned[1]
+                })
         return resp

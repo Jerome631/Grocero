@@ -3,7 +3,6 @@ import random
 from bs4 import BeautifulSoup
 from datetime import date
 import re
-
 today = date.today()
 
 # dd/mm/YY
@@ -15,7 +14,6 @@ def split_at_letters(data):
     if match:
         split_index = match.start()
         return data[:split_index]
-
 
 def reg_replace(start, end, data):
     """
@@ -41,7 +39,6 @@ def replace_if(data, conditions):
             data = data.replace(remove, "")
     return data
 
-
 def remove_string_from_number(data):
     data = re.findall(r'[ -](\d+(?:\.\d+)?)', data)
     return data[0]
@@ -55,21 +52,21 @@ def remove_after_keyword(data, key):
     return str(data.split(key)[0] if key in data else data)
 
 
-def replace_ownbrand(data, brand):
+def replace_ownbrand(data,brand):
     return data.lower().replace(brand, "ownbrand")
 
 
 def remove_currency(data):
-    return data.replace('€', "")
+    return data.replace('€',"")
 
 
-def generate_insert(category, item, shop, data, url, brand=None, sku=None):
+def generate_insert(category,item,shop,data,url,brand=None,sku=None):
     print(data)
     price = f"{(data[1].strip())}"
     other = f"{cleanse(data[2].strip())}" if len(data) > 3 else ''
-    if (brand == None):
+    if(brand == None):
         brand = 'N/A'
-    if (sku == None):
+    if(sku == None):
         sku = 'N/A'
 
     # Whenever we get new data with the same URL, we update the price
@@ -86,25 +83,25 @@ def standardise_liquid(data):
     pattern = r'\b(\d+)\s*(?:ltr|l|litre)\b'
     match = re.findall(pattern, data, re.IGNORECASE)
     if match:
-        data = data[:data.index(match[0]) + 1] + " litre"
+        data = data[:data.index(match[0])+1] + " litre"
 
     # I don't like it but regex won't work
     if "ltr" in data:
-        data = data[:data.index('ltr') - 1] + " " + data[data.index('ltr') - 1] + " litre"
+        data = data[:data.index('ltr') -1] + " " + data[data.index('ltr') -1] + " litre"
 
     return data
 
 
 def standardise(data):
     # data = standardise_liquid(data)
-    data = data.replace("'", "")
+    data = data.replace("'","")
 
     data = remove_currency(cleanse(data))
     # Remove countries we want standardised data
     return replace_if(data, ["irish"])
 
 
-def generate_historical(data, url):
+def generate_historical(data,url):
     price = f"{(data[1].strip())}"
     rstr = f"INSERT into historical_prices values (DEFAULT,'{url}','{price}','{DATE}');"
     return rstr
@@ -114,8 +111,7 @@ def perform_request(url):
     resp = requests.get(url=url)
     return BeautifulSoup(resp.content, "html.parser")
 
-
-def perform_request_tesco(url, param):
+def perform_request_tesco(url,param):
     # For now, seperate, we can fixup later
     agent = f"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/{random.randint(5, 500)}.{random.randint(5, 100)} (KHTML, like Gecko) Chrome/{random.randint(100, 120)}.0.{random.randint(5, 5000)}.{random.randint(100, 120)} Safari/{random.randint(100, 520)}.{random.randint(1, 120)}"
 

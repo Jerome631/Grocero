@@ -1,13 +1,10 @@
 import json
-from common import remove_currency, standardise, standardise_liquid, replace_ownbrand, generate_insert
+from common import remove_currency, standardise, standardise_liquid, replace_ownbrand
 
 import requests
 
 
 class Aldi():
-    def __init__(self, item_names):
-        self.item_names = item_names
-
     historical = []
     products = []
 
@@ -29,24 +26,15 @@ class Aldi():
     )
 
     def search_product(self, product):
-        """
-                Searches for product.
-                product = Name of grocery we want.
-                is_csv: True, as when I run locally, I want to see it in terminal.
-                """
 
         query = json.dumps({"Query": product})
         url = "https://groceries.aldi.ie/api/aldisearch/autocomplete"
         response = requests.post(url=url, headers=self._headers, params=self._params, data=query)
 
-        resp = {
-            'products': [],
-            'meta': []
-        }
+        resp = []
         for item in response.json()['Suggestions']:
 
             aldi_product = standardise(item['DisplayName'])
-            # Aldi actually rename too many things, this isn't really possible to do
             for ownbrand in ['clonbawn', "healys farm",
                              "ballymore crust",
                              "healys",
@@ -55,8 +43,11 @@ class Aldi():
                 if ownbrand in aldi_product:
                     aldi_product = replace_ownbrand(aldi_product, ownbrand)
 
-            price = float(item['ListPrice'])
-            price_per_unit = float(item['UnitPrice'].replace("€",""))
-            generate_insert(product, aldi_product, 'aldi', price, f"https://groceries.aldi.ie/en-GB/Search?keywords={item['Url']}")
-
+            resp.append({
+                'brand': 'Aldi',
+                'category': product,
+                'product': aldi_product,
+                'price': item['ListPrice'],
+                'url': f"https://groceries.aldi.ie/en-GB/Search?keywords={item['Url']}"
+            })
         return resp
