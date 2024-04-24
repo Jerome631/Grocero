@@ -48,8 +48,10 @@ def get_data(item_name: str):
     # Perform sequentially in case one has an issue inserting we still have some data.
     '''db.perform_insert(aldi_prod)'''
     db.perform_insert(super_prod)
+    print("Supervalu insert: " + super_prod)
     '''db.perform_insert(dunnes_products)'''
     db.perform_insert(tesco_prod)
+    print("Tesco insert: " + tesco_prod)
     return get_result_from_db(item_name)
 
 
