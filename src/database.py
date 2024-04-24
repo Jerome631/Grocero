@@ -4,7 +4,7 @@ from datetime import date
 today = date.today()
 
 
-PRICE_DAYS_BACK = 5
+PRICE_DAYS_BACK = 30
 DB_PASS = os.getenv("DB_PASS", "Fortify136")
 
 
