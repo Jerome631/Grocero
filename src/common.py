@@ -18,8 +18,8 @@ def reg_replace(start, end, data):
     Method to replace substring between two start strings.
     :param start: starting string ie hello
     :param end: terminating string ie world
-    :param data: hello to another world this is ciaran.
-    :return: the string with everything gone between start and end : this is ciaran
+    :param data: hello to another world this is me.
+    :return: the string with everything gone between start and end : this is me
     """
     reg = "(%s).*?(%s)" % (start, end)
     r = re.compile(reg, re.DOTALL)
