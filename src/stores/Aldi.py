@@ -1,7 +1,7 @@
 import json
-from ..common import standardise, replace_ownbrand, round_up
-from ..constants import ALDI
-from ..Models import Food
+from common import standardise, replace_ownbrand, round_up
+from constants import ALDI
+from Models import Food
 
 import requests
 
