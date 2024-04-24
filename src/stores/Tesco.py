@@ -1,8 +1,10 @@
+from bs4 import BeautifulSoup
 from common import perform_request_with_agent, standardise, replace_ownbrand, \
     reg_replace, remove_string_from_number, remove_currency, replace_if, round_up
 
 from constants import TESCO
 from Models import Food
+import requests
 
 
 def format_dict(product, cleaned, url):
@@ -73,6 +75,7 @@ class Tesco:
             'query': product,
             'icid': 'tescohp_sws-1_m-sug_in-cola_out-cola',
         }
+        """
         soup = perform_request_with_agent('https://www.tesco.ie/groceries/en-IE/search', params)
         for row in soup.find_all("li", {"class": "product-list--list-item"}):
             raw_html = row.next_element.next_element.text.lower()
@@ -81,5 +84,24 @@ class Tesco:
             cleaned = self.remove_garbage(raw_html)
             if cleaned:
                 resp.append(Food(**format_dict(product, cleaned, url)))
+
+        return resp"""
+        url = 'https://www.tesco.ie/groceries/en-IE/search'
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        response = requests.get(url, params=params, headers=headers)
+
+        if response.status_code == 200:
+            # Parse HTML response
+            soup = BeautifulSoup(response.content, 'html.parser')
+
+            # Extract product information
+            product_list = soup.find_all("li", {"class": "product-list--list-item"})
+            for row in product_list:
+                raw_html = row.find_next("span", {"class": "product-tile--title"}).text.lower()
+                url = f"https://www.tesco.ie/{row.find_all('a', href=True)[0].attrs['href']}"
+                cleaned = self.remove_garbage(raw_html)
+                if cleaned:
+                    # Assuming format_dict function formats the data correctly
+                    resp.append(Food(**format_dict(product, cleaned, url)))
 
         return resp
