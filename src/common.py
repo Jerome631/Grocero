@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re
 from statistics import median, mode, mean
 import math
-from src.constants import DATE
+from constants import DATE
 
 
 def split_at_letters(data):
