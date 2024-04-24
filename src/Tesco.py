@@ -6,10 +6,6 @@ class Tesco():
     Class for Tesco
     """
 
-    def __init__(self,item_name):
-        self.item_name = item_name
-    products = []
-
     def remove_garbage(self, raw_html):
         """
         Method to parse the tesco HTML text and make it useable data.
