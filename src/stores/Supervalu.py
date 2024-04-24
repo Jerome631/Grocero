@@ -1,4 +1,4 @@
-from src.common import replace_ownbrand, perform_request, standardise, remove_currency, replace_if, split_at_letters
+from common import replace_ownbrand, perform_request, standardise, remove_currency, replace_if, split_at_letters
 
 
 class Supervalu():

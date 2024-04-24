@@ -1,6 +1,6 @@
 import json
-from src.common import standardise, replace_ownbrand, round_up
-from src.constants import ALDI
+from common import standardise, replace_ownbrand, round_up
+from constants import ALDI
 from FoodModel import Food
 
 import requests
