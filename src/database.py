@@ -1,8 +1,8 @@
 import os
 import psycopg2
 from datetime import date
-today = date.today()
 
+today = date.today()
 
 PRICE_DAYS_BACK = 30
 DB_PASS = os.getenv("DB_PASS", "Fortify136")
@@ -41,7 +41,6 @@ class DBConnector:
         except Exception as e:
             print(e)
 
-
     def should_fetch_new(self, item):
         """
 
@@ -56,7 +55,9 @@ class DBConnector:
 
         # If there is no data returned by the cursor, that means we need to get some
         if data:
+            print(data)
             print(f"There is data within {PRICE_DAYS_BACK} days")
             return False
+        print(data)
         print(f"No data for {item} within past {PRICE_DAYS_BACK} days")
         return True

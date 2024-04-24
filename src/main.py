@@ -41,6 +41,7 @@ def get_data(item_name: str):
     :param item_name:
     :return: list of dicts.
     """
+    print(f"get_data triggered")
     '''aldi_prod = aldi.search_product(item_name)'''
     super_prod = supervalu.search_product(item_name)
     '''dunnes_products = dunnes.search_product(item_name)'''
@@ -88,7 +89,6 @@ def read_item(item_name: str):
     fetch_new = db.should_fetch_new(item=item_name)
     if fetch_new:
         # Then logically get the new set of data.
-        print(f"get_data triggered")
         return get_data(item_name)
     else:
         print(f"get_result_from_db triggered")
