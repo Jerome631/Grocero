@@ -14,6 +14,7 @@ class DBConnector:
         self._conn_string = f"host='grocerodb.cjy8c8kiefqe.eu-north-1.rds.amazonaws.com' dbname='postgres' user='Jerome' password='{DB_PASS}'"
         self._conn = psycopg2.connect(self._conn_string)
         self._cursor = self._conn.cursor()
+        print(f"DB connection established, cursor assigned")
 
     def perform_insert(self, insert_data):
         """
