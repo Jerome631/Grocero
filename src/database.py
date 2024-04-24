@@ -21,13 +21,14 @@ class DBConnector:
         :param insert_data:
         :return:
         """
+        print("Entered insert function")
         for item in insert_data:
             try:
                 print("Inserting data: "+item)
                 self._cursor.execute(item)
                 self._conn.commit()
             except Exception as e:
-                print(e)
+                print("Insert failed"+e)
 
     def get_item(self, item):
         try:
