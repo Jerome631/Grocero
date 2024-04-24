@@ -68,7 +68,7 @@ class Tesco:
         is_csv: True, as when I run locally, I want to see it in terminal.
         """
         resp = []
-
+        print(f"Tesco search triggered")
         params = {
             'query': product,
             'icid': 'tescohp_sws-1_m-sug_in-cola_out-cola',
@@ -82,4 +82,5 @@ class Tesco:
             if cleaned:
                 resp.append(Food(**format_dict(product, cleaned, url)))
 
+        print(f"Tesco resp:"+ str(resp))
         return resp

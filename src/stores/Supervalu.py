@@ -11,6 +11,7 @@ class Supervalu():
         return [super_product, float(price)]
 
     def search_product(self, product):
+        print(f"Supervalu search triggered")
         result = []
         soup = perform_request(f'https://shop.supervalu.ie/sm/delivery/rsid/5550/results?q={product}')
 
@@ -27,4 +28,5 @@ class Supervalu():
                 continue
             except IndexError as e:
                 continue
+        print(f"Supervalu result:"+str(result))
         return result
