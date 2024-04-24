@@ -3,6 +3,11 @@ from common import replace_ownbrand, perform_request, standardise, remove_curren
 
 class Supervalu():
 
+    def __init__(self, item_name):
+        self.item_name = item_name
+
+    products = []
+
     def remove_garbage(self, raw_product):
         raw_product = raw_product.split("a Day")[0].split(",")
         super_product = replace_ownbrand(standardise(raw_product[0]), "supervalu")
