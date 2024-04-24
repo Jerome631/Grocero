@@ -24,11 +24,12 @@ class DBConnector:
         print("Entered insert function")
         for item in insert_data:
             try:
-                print("Inserting data: "+item)
+                print(f"Inserting data: "+item)
                 self._cursor.execute(item)
                 self._conn.commit()
             except Exception as e:
-                print("Insert failed"+e)
+                print(f"Insert failed")
+                print(e)
 
     def get_item(self, item):
         try:

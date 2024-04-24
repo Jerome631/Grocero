@@ -1,8 +1,8 @@
-from common import replace_ownbrand, remove_currency, perform_request_with_agent, \
+from ..common import replace_ownbrand, remove_currency, perform_request_with_agent, \
     reg_replace, remove_string_from_number, standardise, replace_if, round_up
 
-from constants import DUNNES
-from Models import Food
+from ..constants import DUNNES
+from ..Models import Food
 
 
 def format_dict(product, cleaned, url):

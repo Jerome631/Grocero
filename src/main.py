@@ -47,11 +47,12 @@ def get_data(item_name: str):
     tesco_prod = tesco.search_product(item_name)
     # Perform sequentially in case one has an issue inserting we still have some data.
     '''db.perform_insert(aldi_prod)'''
+    print(f"Attempting get_data perform_insert")
     db.perform_insert(super_prod)
-    print("Supervalu insert: " + super_prod)
+    print(f"Supervalu insert: " + super_prod)
     '''db.perform_insert(dunnes_products)'''
     db.perform_insert(tesco_prod)
-    print("Supervalu insert: " + super_prod)
+    print(f"Supervalu insert: " + super_prod)
     return get_result_from_db(item_name)
 
 
@@ -87,8 +88,10 @@ def read_item(item_name: str):
     fetch_new = db.should_fetch_new(item=item_name)
     if fetch_new:
         # Then logically get the new set of data.
+        print(f"get_data triggered")
         return get_data(item_name)
     else:
+        print(f"get_result_from_db triggered")
         return get_result_from_db(item_name)
 
 
