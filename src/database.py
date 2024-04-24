@@ -23,7 +23,7 @@ class DBConnector:
         """
         for item in insert_data:
             try:
-                print(item)
+                print("Inserting data: "+item)
                 self._cursor.execute(item)
                 self._conn.commit()
             except Exception as e:
