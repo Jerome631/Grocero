@@ -2,7 +2,7 @@ from common import perform_request_with_agent, standardise, replace_ownbrand, \
     reg_replace, remove_string_from_number, remove_currency, replace_if, round_up
 
 from constants import TESCO
-from FoodModel import Food
+from Models import Food
 
 
 def format_dict(product, cleaned, url):
